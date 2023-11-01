@@ -1,6 +1,7 @@
 const Answer=require('../model/answer')
 const Question=require('../model/question')
 
+
 const ans= async(req,res)=>{
     const answer=new Answer({
         answer:req.body.answer,
