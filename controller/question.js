@@ -43,10 +43,29 @@ const filterByUserId = async(req, res) => {
         res.send(filteredQuestions)
     })
 }
+const deleteQuestion=async(req,res)=>{
+    try {
+        const ques=await Question.findById(req.body.id)
+        const q1=await ques.deleteOne()
+        res.send("Question deleted !")
+    } catch (error) {
+        res.send("Error in deleting questiosn")
+    }
+}
+const updateQuestion=async(req,res)=>{
+    try {
+        const user=await Question.findByIdAndUpdate(req.params.id,req.body,)
+        res.send("Updated")
+    } catch (error) {
+        res.status(500).send("not updated")
+    }
+}
 module.exports={
    askQuestion,
    getQuestions,
    filterByCategory,
-   filterByUserId
+   filterByUserId,
+   deleteQuestion,
+   updateQuestion
 
 }

@@ -63,6 +63,14 @@ const follow=async(req,res)=>{
         res.status(500).send(error)        
     }
 }
+const getusers=async(req,res)=>{
+    try {
+        const user=await User.find()
+        res.json(user)
+    } catch (error) {
+        res.send("Error")
+    }
+}
 
 const unfollow=async(req,res)=>{
     try {
@@ -80,8 +88,56 @@ const unfollow=async(req,res)=>{
         res.status(500).send(error)        
     }
 }
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+})
+const profilePic= async(req,res)=>{
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        const profilePicUrl = result.secure_url;
+
+        const user = await User.findById(req.user._id);
+        user.profilePicUrl = profilePicUrl;
+        await user.save();
+        return res.send("Profile picture uploaded ");
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+const deleteUser=async(req,res)=>{
+    try {
+        const user=await User.findById(req.user._id)
+        const u1=await user.deleteOne()
+        res.send("User deleted ")
+    } catch (error) {
+        res.status(500).send("Error ")
+    }
+}
+const getFollower=async(req,res)=>{
+    try {
+        const user =await User.findById(req.user._id)
+        res.send(user.followers)
+    } catch (error) {
+        res.status(500).send("Error")
+    }
+}
+const updateUser=async(req,res)=>{
+    try {
+        const user=await User.findByIdAndUpdate(req.user._id,req.body,)
+        res.send("Updated ")
+    } catch (error) {
+        res.status(500).send("NOT UPDATED")
+    }
+}
+
+
+
 module.exports ={
     register,
     login,
-    follow, unfollow
+    follow, 
+    unfollow,
+    profilePic,deleteUser,getFollower,updateUser,getusers
 }

@@ -24,7 +24,7 @@ const upvote=async(req,res)=>{
     try {
         const answer=await Answer.findById(req.params.id)
         if(!answer){
-            return res.send("Wrong user-id")
+            return res.send("Wrong user")
         }
         answer.upvote.push(req.user._id)
         await answer.save()
@@ -37,7 +37,7 @@ const downvote=async(req,res)=>{
     try {
         const answer=await Answer.findById(req.params.id)
         if(!answer){
-            return res.send("Wrong user-id")
+            return res.send("Wrong user")
         }
         answer.downvote.push(req.user._id)
         await answer.save()
@@ -46,7 +46,28 @@ const downvote=async(req,res)=>{
         res.status(500).send(error)
     }
 }
+const deleteanswer=async(req,res)=>{
+    try {
+        const ans=await Answer.findById(req.body.id)
+        const q1=await ans.deleteOne()
+        res.send("Answer deleted ")
+    } catch (error) {
+        res.send("Error")
+    }
+}
+const updateanswer=async(req,res)=>{
+    try {
+        const user=await Answer.findByIdAndUpdate(req.params.id,req.body,)
+        res.send("Answer Updated")
+    } catch (error) {
+        res.status(500).send("not updated")
+    }
+}
 
 module.exports={ 
-    ans,upvote,downvote
+    ans,
+    upvote,
+    downvote,
+    deleteanswer,
+    updateanswer
  }
