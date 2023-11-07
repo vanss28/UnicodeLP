@@ -32,7 +32,12 @@ const userSchema=new Schema({
     }],
     following:[{
         type: mongoose.Schema.Types.ObjectId,ref:'User',default:0
-    }]
+    }],
+    profilePicUrl: {
+        type: String 
+    },
 })
+
+
 
 module.exports=mongoose.model('User',userSchema)
